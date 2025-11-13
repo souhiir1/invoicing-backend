@@ -114,12 +114,12 @@ console.log("here")
  const paymeeRes = await axios.post(
   'https://sandbox.paymee.tn/api/v2/payments/create',
   {
-    amount: Number(payment.amount), // ensure it's a number
+    amount: Number(payment.amount), 
     note: `Subscription ${payment.type}`,
     first_name,
     last_name,
     email: email || 'user@example.com',
-    phone: phone || '+21653123640', // must be provided
+    phone: phone || '+21653123640', 
     success_url: `${process.env.FRONT_URL}/payment/success`,
     fail_url: `${process.env.FRONT_URL}/payment/failure`,
     webhook_url: callbackUrl,
@@ -158,11 +158,11 @@ console.log("paymeeRes",paymeeRes)
 
 router.post('/paymee-callback', async (req, res) => {
   try {
-    // Use req.body for urlencoded data
+  
     const token = req.body.token || req.query.token;
     const status = req.body.status || req.query.status;
 
-    console.log('Paymee callback body:', req.body); // optional for debugging
+    console.log('Paymee callback body:', req.body); 
 
     if (!token || !status) {
       return res.status(400).json({ error: 'Missing token or status' });
@@ -180,15 +180,12 @@ router.post('/paymee-callback', async (req, res) => {
     const payment = paymentResult.rows[0];
     const userId = payment.user_id;
 
-    // Update payment status
     await pool.query(
       `UPDATE payments 
        SET status = $1, updated_at = now()
        WHERE id = $2`,
       [status === 'paid' ? 'paid' : 'failed', payment.id]
     );
-
-    // If payment successful, update user's subscription
     if (status === 'paid') {
       let subscriptionEnd = null;
       if (payment.type === 'monthly') {
@@ -203,7 +200,6 @@ router.post('/paymee-callback', async (req, res) => {
       );
     }
 
-    // Respond to Paymee
     res.json({ success: true });
   } catch (err) {
     console.error('Paymee callback error:', err);

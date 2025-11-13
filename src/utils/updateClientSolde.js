@@ -5,7 +5,6 @@ async function updateClientSolde(clientId, userId) {
   try {
     await client.query('BEGIN');
 
-    // 1️⃣ Get initial balance
     const { rows: clientRows } = await client.query(
       'SELECT solde_ini FROM clients WHERE id = $1 AND user_id = $2',
       [clientId, userId]
@@ -17,7 +16,6 @@ async function updateClientSolde(clientId, userId) {
 
     const soldeIni = parseFloat(clientRows[0].solde_ini) || 0;
 
-    // 2️⃣ Get total unpaid invoices
     const { rows: invoiceRows } = await client.query(
       `SELECT COALESCE(SUM(total_ttc), 0) AS total_unpaid
        FROM invoices
@@ -29,7 +27,7 @@ async function updateClientSolde(clientId, userId) {
     const totalUnpaid = parseFloat(invoiceRows[0].total_unpaid) || 0;
     const newSolde = soldeIni + totalUnpaid;
 
-    // 3️⃣ Update client solde
+ 
     await client.query(
       'UPDATE clients SET solde = $1 WHERE id = $2 AND user_id = $3',
       [newSolde, clientId, userId]

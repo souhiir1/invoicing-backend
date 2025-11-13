@@ -7,7 +7,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const clientRoutes = require('./routes/clientRoutes');
-const pdfRoutes = require('./routes/pdfRoutes');
+
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const subscriptionRoutes = require('./routes/subscription');
@@ -28,7 +28,6 @@ app.get('/api/test-db', async (req, res) => {
   }
 });
 
-app.use('/api/pdf', pdfRoutes);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/invoices', invoiceRoutes);

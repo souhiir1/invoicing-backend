@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
-  secure: false, // use true if port 465
+  secure: false, 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendResetEmail(to, token) {
-  const resetUrl = `http://localhost:3000/reset-password?token=${token}`; // frontend URL
+  const resetUrl = `${process.env.FRONT_URL}/reset-password?token=${token}`; 
   const html = `
     <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
     <p>Voici votre lien : <a href="${resetUrl}">${resetUrl}</a></p>
