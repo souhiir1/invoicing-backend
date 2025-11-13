@@ -71,7 +71,7 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-// Register
+
 router.post('/register', async (req, res) => {
   const { email, password, full_name, tel, adresse } = req.body;
 
@@ -129,6 +129,7 @@ router.post('/login', async (req, res) => {
         status: user.status,
       },
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Login failed' });
